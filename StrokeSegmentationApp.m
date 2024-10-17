@@ -112,6 +112,7 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
             app.NiftiInfo = niftiinfo(fullfile(path, file));
             app.OriginalVolume = niftiread(app.NiftiInfo);
             app.CurrentSlice = round(size(app.OriginalVolume, 3) / 2);
+            app.SegmentedVolume = []; % Clear previous segmentation
             app.updateViewer();
             app.StatusLabel.Text = 'Image loaded successfully';
         end
@@ -136,6 +137,11 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
                     app.CurrentSlice = min(size(app.OriginalVolume, 3), app.CurrentSlice + 1);
             end
             app.updateViewer();
+        end
+
+        % Menu selected function: ExitMenuItem
+        function ExitMenuItemSelected(app, event)
+            delete(app);
         end
 
     end
