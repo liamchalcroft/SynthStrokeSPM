@@ -20,7 +20,7 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
         SegmentedVolume    % Segmented image volume
         NiftiInfo          % NIfTI information structure
         CurrentSlice       % Current slice being displayed
-        ShowLesion         % Boolean to toggle lesion visibility
+        ShowLesion         logical = false  % Boolean to toggle lesion visibility
         Model              % Pre-loaded ONNX model
         ModelPath          % Path to the ONNX model file
     end
@@ -35,7 +35,7 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
 
             slice = app.OriginalVolume(:,:,app.CurrentSlice);
             
-            if app.ShowLesion && ~isempty(app.SegmentedVolume)
+            if logical(app.ShowLesion) && ~isempty(app.SegmentedVolume)
                 lesion_slice = app.SegmentedVolume(:,:,app.CurrentSlice) > 0;
                 rgb_slice = repmat(mat2gray(slice), [1 1 3]);
                 rgb_slice(:,:,1) = rgb_slice(:,:,1) + 0.5 * lesion_slice;
@@ -124,7 +124,7 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
 
         % Value changed function: LesionToggleButton
         function LesionToggleButtonValueChanged(app, event)
-            app.ShowLesion = app.LesionToggleButton.Value;
+            app.ShowLesion = logical(app.LesionToggleButton.Value);
             app.updateViewer();
         end
 
