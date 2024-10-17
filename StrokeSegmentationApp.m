@@ -11,6 +11,7 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
         TTACheckBox            matlab.ui.control.CheckBox
         SlidingWindowCheckBox  matlab.ui.control.CheckBox
         Viewer3D               matlab.ui.control.UIAxes
+        StatusLabel            matlab.ui.control.Label
     end
 
     % Properties that correspond to app data
@@ -20,6 +21,8 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
         NiftiInfo          % NIfTI information structure
         CurrentSlice       % Current slice being displayed
         ShowLesion         % Boolean to toggle lesion visibility
+        Model              % Pre-loaded ONNX model
+        ModelPath          % Path to the ONNX model file
     end
 
     methods (Access = private)
@@ -32,7 +35,7 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
 
             slice = app.OriginalVolume(:,:,app.CurrentSlice);
             
-            if app.ShowLesion
+            if app.ShowLesion && ~isempty(app.SegmentedVolume)
                 lesion_slice = app.SegmentedVolume(:,:,app.CurrentSlice) > 0;
                 rgb_slice = repmat(mat2gray(slice), [1 1 3]);
                 rgb_slice(:,:,1) = rgb_slice(:,:,1) + 0.5 * lesion_slice;
@@ -45,10 +48,43 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
         end
 
         function segmentImage(app)
-            % Perform segmentation using the stroke_segmentation function
-            [app.OriginalVolume, app.SegmentedVolume, app.NiftiInfo] = stroke_segmentation(app.NiftiInfo.Filename, 'path/to/model.onnx', app.TTACheckBox.Value, app.SlidingWindowCheckBox.Value);
-            app.CurrentSlice = round(size(app.OriginalVolume, 3) / 2);
-            app.updateViewer();
+            % Perform segmentation using the pre-loaded model
+            if isempty(app.Model)
+                app.StatusLabel.Text = 'Error: Model not loaded';
+                return;
+            end
+
+            app.StatusLabel.Text = 'Segmenting image...';
+            drawnow;
+
+            try
+                [app.OriginalVolume, app.SegmentedVolume, app.NiftiInfo] = stroke_segmentation(...
+                    app.NiftiInfo.Filename, ...
+                    app.Model, ...
+                    app.TTACheckBox.Value, ...
+                    app.SlidingWindowCheckBox.Value);
+                
+                app.CurrentSlice = round(size(app.OriginalVolume, 3) / 2);
+                app.updateViewer();
+                app.StatusLabel.Text = 'Segmentation complete';
+            catch ME
+                app.StatusLabel.Text = ['Error: ', ME.message];
+            end
+        end
+
+        function loadModel(app)
+            % Load the ONNX model asynchronously
+            app.StatusLabel.Text = 'Loading model...';
+            drawnow;
+
+            try
+                app.Model = importONNXNetwork(app.ModelPath);
+                app.StatusLabel.Text = 'Model loaded successfully';
+                app.SegmentButton.Enable = 'on';
+            catch ME
+                app.StatusLabel.Text = ['Error loading model: ', ME.message];
+                app.SegmentButton.Enable = 'off';
+            end
         end
 
     end
@@ -60,6 +96,11 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
         function startupFcn(app)
             app.ShowLesion = false;
             app.CurrentSlice = 1;
+            app.ModelPath = './unet.onnx';  % Update this path
+            app.SegmentButton.Enable = 'off';
+            
+            % Start asynchronous model loading
+            future = parfeval(backgroundPool, @app.loadModel, 0);
         end
 
         % Menu item selected function: OpenMenuItem
@@ -72,6 +113,7 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
             app.OriginalVolume = niftiread(app.NiftiInfo);
             app.CurrentSlice = round(size(app.OriginalVolume, 3) / 2);
             app.updateViewer();
+            app.StatusLabel.Text = 'Image loaded successfully';
         end
 
         % Button pushed function: SegmentButton
@@ -151,6 +193,11 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
             title(app.Viewer3D, 'Slice Viewer');
             xlabel(app.Viewer3D, 'X');
             ylabel(app.Viewer3D, 'Y');
+
+            % Create StatusLabel
+            app.StatusLabel = uilabel(app.UIFigure);
+            app.StatusLabel.Position = [20 450 600 22];
+            app.StatusLabel.Text = 'Ready';
         end
     end
 
