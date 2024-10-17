@@ -87,6 +87,20 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
             end
         end
 
+        function UIFigureWindowScrollWheel(app, event)
+            if ~isempty(app.OriginalVolume)
+                % Determine scroll direction
+                if event.VerticalScrollCount > 0
+                    % Scroll down, move to next slice
+                    app.CurrentSlice = min(size(app.OriginalVolume, 3), app.CurrentSlice + 1);
+                else
+                    % Scroll up, move to previous slice
+                    app.CurrentSlice = max(1, app.CurrentSlice - 1);
+                end
+                app.updateViewer();
+            end
+        end
+
     end
 
     % Callbacks that handle component events
@@ -156,6 +170,9 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
             app.UIFigure.Position = [100 100 640 480];
             app.UIFigure.Name = 'Stroke Segmentation Viewer';
             app.UIFigure.KeyPressFcn = createCallbackFcn(app, @UIFigureKeyPress, true);
+            
+            % Add scroll wheel listener
+            app.UIFigure.WindowScrollWheelFcn = createCallbackFcn(app, @UIFigureWindowScrollWheel, true);
 
             % Create FileMenu
             app.FileMenu = uimenu(app.UIFigure);
