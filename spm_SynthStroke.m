@@ -33,8 +33,9 @@ for i = 1:numel(job.input)
 
     % Determine the output directory
     if isempty(job.outdir)
-        outdir = fileparts(job.input{i});
+        [outdir, ~, ~] = fileparts(job.input{i});
     else
+        disp('Not empty');
         outdir = job.outdir{1};
     end
 
@@ -44,7 +45,7 @@ for i = 1:numel(job.input)
     end
 
     % Save the posteriors as separate volumes for each class
-    [~, nam, ext] = fileparts(job.input{i});
+    [~, nam, ~] = fileparts(job.input{i});
     V_seg = V;
     V_seg.dt = [spm_type('float32') spm_platform('bigend')];  % Ensure float32 data type
     
@@ -56,7 +57,7 @@ for i = 1:numel(job.input)
     end
 
     % Save the segmented image
-    [~, nam, ext] = fileparts(job.input{i});
+    [~, nam, ~] = fileparts(job.input{i});
     out.lesion{i} = fullfile(outdir, [job.prefix 'Lesion_SynthStroke_' nam '.nii']);
     V_seg = V;
     V_seg.fname = out.lesion{i};

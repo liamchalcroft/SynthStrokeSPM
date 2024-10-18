@@ -36,7 +36,7 @@ outdir.help    = {'Select the output directory for segmented images. If left emp
 outdir.filter  = 'dir';
 outdir.ufilter = '.*';
 outdir.num     = [0 1];
-outdir.val     = {{''}};  % Default to empty (use input directory)
+outdir.val     = {{}};  % Default to empty (use input directory)
 
 % Prefix
 prefix         = cfg_entry;
@@ -60,7 +60,7 @@ fill_holes.def     = @(val)false;
 synthstroke      = cfg_exbranch;
 synthstroke.tag  = 'synthstroke';
 synthstroke.name = 'SynthStroke';
-synthstroke.val  = {input, lesion_threshold, use_tta, fill_holes, outdir};
+synthstroke.val  = {input, lesion_threshold, use_tta, fill_holes, outdir, prefix};
 synthstroke.help = {'Perform stroke segmentation on brain MRI images.'};
 synthstroke.prog = @spm_run_synthstroke;
 synthstroke.vout = @vout_synthstroke;
