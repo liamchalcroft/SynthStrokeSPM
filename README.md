@@ -1,8 +1,8 @@
-# SynthStroke: SPM Toolbox for Stroke Lesion Segmentation
+# 🧠 SynthStroke: SPM Toolbox for Stroke Lesion Segmentation
 
 SynthStroke is a powerful toolbox for SPM (Statistical Parametric Mapping) that performs automated stroke lesion segmentation on brain MRI images using deep learning techniques.
 
-## Features
+## ✨ Features
 
 - Automated stroke lesion segmentation
 - Integration with SPM12
@@ -10,7 +10,7 @@ SynthStroke is a powerful toolbox for SPM (Statistical Parametric Mapping) that 
 - Binary hole filling for lesion masks
 - Customizable output options
 
-## Installation
+## 🛠️ Installation
 
 1. Download the SynthStroke toolbox.
 2. Place the SynthStroke folder in your SPM toolbox directory:
@@ -19,7 +19,9 @@ SynthStroke is a powerful toolbox for SPM (Statistical Parametric Mapping) that 
    ```
 3. Restart SPM12 or refresh the SPM toolbox menu.
 
-## Usage
+That's it! No additional compilation or external dependencies are required.
+
+## 🚀 Usage
 
 1. Open SPM12
 2. Navigate to "Batch" → "SPM" → "Tools" → "SynthStroke"
@@ -29,37 +31,38 @@ SynthStroke is a powerful toolbox for SPM (Statistical Parametric Mapping) that 
    - Set the output directory (optional)
    - Run the batch
 
-## Options
+## ⚙️ Options
 
 - **Use TTA**: Enable Test Time Augmentation for potentially improved results
 - **Fill holes**: Apply binary hole filling to the lesion mask
 - **Lesion threshold**: Set the threshold for lesion classification (0-1)
 - **Output prefix**: Customize the prefix for output files
 
-## Output
+## 📊 Output
 
 SynthStroke generates:
 - Posterior probability maps for each class
 - Binary lesion mask
 
-## Requirements
+## 📋 Requirements
 
 - MATLAB (R2019b or later recommended)
 - SPM12
 - Deep Learning Toolbox
 
-## Support
+**Important Note:** SynthStroke works out of the box with pure MATLAB. There is no need for Python, CUDA, or MEX compilation. This toolbox is designed to run seamlessly within the MATLAB environment, making it easy to use without additional setup or dependencies.
+
+## 🆘 Support
 
 For issues, questions, or contributions, please open an issue on our GitHub repository or contact [Your Contact Information].
 
-## Citation
+## 📚 Citation
 
-If you use SynthStroke in your research, please cite:
 If you use SynthStroke in your research, please cite:
 
 Chalcroft, L., Pappas, I., Price, C. J., & Ashburner, J. (2024). Synthetic Data for Robust Stroke Segmentation. arXiv preprint arXiv:2404.01946. https://arxiv.org/abs/2404.01946
 
-## License
+## 📜 License
 
 This project is licensed under the MIT License.
 
