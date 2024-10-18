@@ -63,3 +63,6 @@ __pycache__/
 *.swp
 *.tmp
 *~
+
+# Brain images produced by toolbox
+*SynthStroke*.nii
