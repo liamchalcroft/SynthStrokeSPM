@@ -38,6 +38,15 @@ outdir.ufilter = '.*';
 outdir.num     = [0 1];
 outdir.val     = {{''}};  % Default to empty (use input directory)
 
+% Prefix
+prefix         = cfg_entry;
+prefix.tag     = 'prefix';
+prefix.name    = 'Prefix';
+prefix.help    = {'Prefix for the output files.'};
+prefix.strtype = 's';
+prefix.num     = [0 1];
+prefix.def     = @(val) '';
+
 % Fill Holes option
 fill_holes         = cfg_menu;
 fill_holes.tag     = 'fill_holes';

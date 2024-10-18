@@ -28,7 +28,7 @@ for i = 1:numel(job.input)
 
     % Fill the holes in the lesion mask
     if job.fill_holes
-        lesion = uint8(spm_binary_fill_holes(lesion));
+        lesion = uint8(binary_fill_holes(lesion));
     end
 
     % Determine the output directory
@@ -49,7 +49,7 @@ for i = 1:numel(job.input)
     V_seg.dt = [spm_type('float32') spm_platform('bigend')];  % Ensure float32 data type
     
     for j = 1:size(posteriors, 4)
-        posteriors_file = fullfile(outdir, sprintf('Posterior_SynthStroke_%s_class%d.nii', nam, j));
+        posteriors_file = fullfile(outdir, sprintf('%sPosterior_SynthStroke_%s_class%d.nii',job.prefix, nam, j));
         V_seg.fname = posteriors_file;
         V_seg.descrip = sprintf('SynthStroke Posterior Probabilities - Class %d', j);
         spm_write_vol(V_seg, posteriors(:,:,:,j));
@@ -57,7 +57,7 @@ for i = 1:numel(job.input)
 
     % Save the segmented image
     [~, nam, ext] = fileparts(job.input{i});
-    out.lesion{i} = fullfile(outdir, ['Lesion_SynthStroke_' nam '.nii']);
+    out.lesion{i} = fullfile(outdir, [job.prefix 'Lesion_SynthStroke_' nam '.nii']);
     V_seg = V;
     V_seg.fname = out.lesion{i};
     V_seg.descrip = sprintf('SynthStroke Lesion Segmentation (threshold: %.2f)', job.lesion_threshold);
