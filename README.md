@@ -54,7 +54,7 @@ SynthStroke generates:
 
 ## 🆘 Support
 
-For issues, questions, or contributions, please open an issue on our GitHub repository or contact [Your Contact Information].
+For issues, questions, or contributions, please open an issue on the GitHub repository.
 
 ## 📚 Citation
 
