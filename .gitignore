@@ -2,7 +2,6 @@
 *.asv
 *.m~
 *.mex*
-*.mat
 slprj/
 sccprj/
 codegen/
