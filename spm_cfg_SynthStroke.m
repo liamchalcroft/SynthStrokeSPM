@@ -26,7 +26,7 @@ lesion_threshold.name    = 'Lesion Threshold';
 lesion_threshold.help    = {'Set the threshold for lesion segmentation (0-1). Higher values result in more conservative lesion detection.'};
 lesion_threshold.strtype = 'r';
 lesion_threshold.num     = [1 1];
-lesion_threshold.def     = @(val)0.5;
+lesion_threshold.def     = @(val)0.167;
 
 % Output Directory
 outdir         = cfg_files;
