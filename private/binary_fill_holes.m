@@ -1,43 +1,30 @@
-function output = spm_binary_fill_holes(input, structure, origin)
-% SPM_BINARY_FILL_HOLES Fill the holes in binary objects
+function output = binary_fill_holes(input, connectivity)
+% BINARY_FILL_HOLES Fill the holes in binary objects using flood fill
 %
 % INPUTS:
-%   input     - N-D binary array with holes to be filled
-%   structure - (optional) Structuring element used in the computation
-%   origin    - (optional) Position of the structuring element
+%   input        - N-D binary array with holes to be filled
+%   connectivity - (optional) Connectivity for flood fill (default: 6 for 3D, 4 for 2D)
 %
 % OUTPUT:
-%   output    - Transformation of the initial image where holes have been filled
+%   output       - Binary array with holes filled
 %
-% This function is based on the SciPy implementation of binary_fill_holes
+% This function uses a flood-fill algorithm for more drastic hole filling
 
 % Input validation and default values
 if nargin < 1
     error('Input image is required');
 end
 
-if nargin < 2 || isempty(structure)
-    structure = ones(3,3,3);
-end
-
-if nargin < 3
-    origin = floor(size(structure) / 2);
-end
-
 % Ensure input is logical
 input = logical(input);
 
-% Create mask (complement of input)
-mask = ~input;
+% Determine dimensionality and set default connectivity
+dims = ndims(input);
+if nargin < 2
+    connectivity = 2 * dims;
+end
 
-% Create temporary array
-tmp = false(size(mask));
-
-% Perform binary dilation
-dilated = imdilate(tmp, structure);
-dilated(mask) = true;
-
-% Invert the result
-output = ~dilated;
+% Flood fill from the edges
+output = imfill(input, connectivity, 'holes');
 
 end
