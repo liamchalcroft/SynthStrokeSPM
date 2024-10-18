@@ -12,6 +12,7 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
         SlidingWindowCheckBox  matlab.ui.control.CheckBox
         Viewer3D               matlab.ui.control.UIAxes
         StatusLabel            matlab.ui.control.Label
+        RotateButton           matlab.ui.control.StateButton
     end
 
     % Properties that correspond to app data
@@ -23,6 +24,7 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
         ShowLesion         logical = false  % Boolean to toggle lesion visibility
         Model              % Pre-loaded ONNX model
         ModelPath          % Path to the ONNX model file
+        IsRotated          logical = false  % Track whether the view is rotated
     end
 
     methods (Access = private)
@@ -35,13 +37,22 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
 
             slice = app.OriginalVolume(:,:,app.CurrentSlice);
             
-            if logical(app.ShowLesion) && ~isempty(app.SegmentedVolume)
-                lesion_slice = app.SegmentedVolume(:,:,app.CurrentSlice) > 0;
-                rgb_slice = repmat(mat2gray(slice), [1 1 3]);
-                rgb_slice(:,:,1) = rgb_slice(:,:,1) + 0.5 * lesion_slice;
-                imshow(rgb_slice, 'Parent', app.Viewer3D);
+            if app.IsRotated
+                slice = rot90(slice, -1);
+                if logical(app.ShowLesion) && ~isempty(app.SegmentedVolume)
+                    lesion_slice = rot90(app.SegmentedVolume(:,:,app.CurrentSlice) > 0, -1);
+                    rgb_slice = repmat(mat2gray(slice), [1 1 3]);
+                    rgb_slice(:,:,1) = rgb_slice(:,:,1) + 0.5 * lesion_slice;
+                    imshow(rgb_slice, 'Parent', app.Viewer3D);
+                else
+                    imshow(slice, [], 'Parent', app.Viewer3D);
+                end
+                xlabel(app.Viewer3D, 'Y');
+                ylabel(app.Viewer3D, 'X');
             else
                 imshow(slice, [], 'Parent', app.Viewer3D);
+                xlabel(app.Viewer3D, 'X');
+                ylabel(app.Viewer3D, 'Y');
             end
             
             title(app.Viewer3D, sprintf('Slice %d/%d', app.CurrentSlice, size(app.OriginalVolume, 3)));
@@ -158,6 +169,12 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
             delete(app);
         end
 
+        % Value changed function: RotateButton
+        function RotateButtonValueChanged(app, event)
+            app.IsRotated = app.RotateButton.Value;
+            app.updateViewer();
+        end
+
     end
 
     % App initialization and construction
@@ -221,6 +238,12 @@ classdef StrokeSegmentationApp < matlab.apps.AppBase
             app.StatusLabel = uilabel(app.UIFigure);
             app.StatusLabel.Position = [20 450 600 22];
             app.StatusLabel.Text = 'Ready';
+
+            % Create RotateButton
+            app.RotateButton = uibutton(app.UIFigure, 'state');
+            app.RotateButton.Text = 'Rotate View';
+            app.RotateButton.Position = [510 20 100 22];
+            app.RotateButton.ValueChangedFcn = createCallbackFcn(app, @RotateButtonValueChanged, true);
         end
     end
 
