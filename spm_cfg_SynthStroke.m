@@ -17,7 +17,7 @@ use_tta.name    = 'Use Test Time Augmentation';
 use_tta.help    = {'Use Test Time Augmentation for improved segmentation.'};
 use_tta.labels  = {'No', 'Yes'};
 use_tta.values  = {false, true};
-use_tta.def     = @(val)use_tta.values{1};
+use_tta.def     = @(val)false;
 
 % Lesion Threshold
 lesion_threshold         = cfg_entry;
@@ -38,11 +38,20 @@ outdir.ufilter = '.*';
 outdir.num     = [0 1];
 outdir.val     = {{''}};  % Default to empty (use input directory)
 
+% Fill Holes option
+fill_holes         = cfg_menu;
+fill_holes.tag     = 'fill_holes';
+fill_holes.name    = 'Fill Holes';
+fill_holes.help    = {'Fill holes in the lesion mask. This uses a binary hole filling algorithm to clean up the lesion mask.'};
+fill_holes.labels  = {'No', 'Yes'};
+fill_holes.values  = {false, true};
+fill_holes.def     = @(val)false;
+
 % Executable branch
 synthstroke      = cfg_exbranch;
 synthstroke.tag  = 'synthstroke';
 synthstroke.name = 'SynthStroke';
-synthstroke.val  = {input, lesion_threshold, use_tta, outdir};
+synthstroke.val  = {input, lesion_threshold, use_tta, fill_holes, outdir};
 synthstroke.help = {'Perform stroke segmentation on brain MRI images.'};
 synthstroke.prog = @spm_run_synthstroke;
 synthstroke.vout = @vout_synthstroke;

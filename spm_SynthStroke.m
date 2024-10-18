@@ -26,6 +26,11 @@ for i = 1:numel(job.input)
     posteriors = stroke_segmentation(img, net, job.use_tta);
     lesion = uint8(squeeze(posteriors(:,:,:,end)) > job.lesion_threshold);
 
+    % Fill the holes in the lesion mask
+    if job.fill_holes
+        lesion = uint8(spm_binary_fill_holes(lesion));
+    end
+
     % Determine the output directory
     if isempty(job.outdir)
         outdir = fileparts(job.input{i});
