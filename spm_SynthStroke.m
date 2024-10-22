@@ -23,6 +23,11 @@ for i = 1:numel(job.input)
 
     img = spm_read_vols(V);
 
+    % If the input is CT data, clip to 0 and 100 HU
+    if job.ct_data
+        img = max(0, min(100, img));
+    end
+
     % Reslice the image to 1mm isotropic resolution
     original_voxel_size = sqrt(sum(V.mat(1:3,1:3).^2));
     img_isotropic = reslice_data(img, original_voxel_size, [1 1 1]);
@@ -63,10 +68,10 @@ for i = 1:numel(job.input)
     V_seg = V;
     V_seg.dt = [spm_type('float32') spm_platform('bigend')];  % Ensure float32 data type
     
-    for j = 1:size(posteriors, 4)
-        posteriors_file = fullfile(outdir, sprintf('%sPosterior_SynthStroke_%s_class%d.nii',job.prefix, nam, j));
+    for j = 2:size(posteriors, 4)
+        posteriors_file = fullfile(outdir, sprintf('%sPosterior_SynthStroke_%s_class%d.nii',job.prefix, nam, j-1));
         V_seg.fname = posteriors_file;
-        V_seg.descrip = sprintf('SynthStroke Posterior Probabilities - Class %d', j);
+        V_seg.descrip = sprintf('SynthStroke Posterior Probabilities - Class %d', j-1);
         spm_write_vol(V_seg, posteriors(:,:,:,j));
     end
 

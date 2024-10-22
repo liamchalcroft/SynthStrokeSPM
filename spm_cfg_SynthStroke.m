@@ -56,11 +56,20 @@ fill_holes.labels  = {'No', 'Yes'};
 fill_holes.values  = {false, true};
 fill_holes.def     = @(val)false;
 
+% CT data option
+ct_data         = cfg_menu;
+ct_data.tag     = 'ct_data';
+ct_data.name    = 'CT Data';
+ct_data.help    = {'Specify if all input images are CT data for stroke segmentation. Use this option for CT datasets; for MRI datasets, select "No".'};
+ct_data.labels  = {'No', 'Yes'};
+ct_data.values  = {false, true};
+ct_data.def     = @(val)false;
+
 % Executable branch
 synthstroke      = cfg_exbranch;
 synthstroke.tag  = 'synthstroke';
 synthstroke.name = 'SynthStroke';
-synthstroke.val  = {input, lesion_threshold, use_tta, fill_holes, outdir, prefix};
+synthstroke.val  = {input, lesion_threshold, use_tta, fill_holes, ct_data, outdir, prefix};
 synthstroke.help = {'Perform stroke segmentation on brain MRI images.'};
 synthstroke.prog = @spm_run_synthstroke;
 synthstroke.vout = @vout_synthstroke;
