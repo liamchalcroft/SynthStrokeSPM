@@ -2,6 +2,8 @@
 
 SynthStroke is a powerful toolbox for SPM (Statistical Parametric Mapping) that performs automated stroke lesion segmentation on brain MRI images using deep learning techniques.
 
+*Note: This tool is currently in a very early alpha state and is likely to have bugs or unexpected failure cases. We warmly welcome users to test the tool on their own data and report any issues on GitHub. Your feedback and bug reports will help us improve the tool's reliability and functionality.*
+
 ## ✨ Features
 
 - Automated stroke lesion segmentation
@@ -9,6 +11,7 @@ SynthStroke is a powerful toolbox for SPM (Statistical Parametric Mapping) that 
 - Support for Test Time Augmentation (TTA)
 - Binary hole filling for lesion masks
 - Customizable output options
+- Support for both MRI and CT data
 
 ## 🛠️ Installation
 
