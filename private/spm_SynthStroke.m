@@ -2,10 +2,12 @@ function out = spm_SynthStroke(job)
 % SPM_SYNTHSTROKE Perform stroke segmentation on brain MRI images
 % This function is called by SPM to segment stroke lesions
 
-% Get the path of the current file (spm_SynthStroke.m)
-current_file_path = mfilename('fullpath');
-% Get the directory of the current file
-[toolbox_dir, ~, ~] = fileparts(current_file_path);
+% Get the toolbox path - update to handle SynthStrokeSPM folder name
+if ~isdeployed
+    toolbox_dir = fullfile(spm('dir'), 'toolbox', 'SynthStrokeSPM');
+    addpath(toolbox_dir);
+end
+
 % Construct the path to the model file
 model_path = fullfile(toolbox_dir, 'data', 'unet.mat');
 
@@ -25,7 +27,7 @@ for i = 1:numel(job.input)
 
     % If the input is CT data, clip to 0 and 100 HU
     if job.ct_data
-        img = max(0, min(100, img));
+        img = max(0, min(70, img));
     end
 
     % Reslice the image to 1mm isotropic resolution
