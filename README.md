@@ -49,7 +49,7 @@ SynthStroke generates:
 
 ## 📋 Requirements
 
-- MATLAB (R2022b or later recommended)
+- MATLAB (R2024b tested, R2024a expected to work; compatibility with older versions in development)
 - SPM12
 - Deep Learning Toolbox
 
