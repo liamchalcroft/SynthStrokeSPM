@@ -51,7 +51,8 @@ SynthStroke generates:
 
 - MATLAB (R2024b tested, R2024a expected to work; compatibility with older versions in development)
 - SPM12
-- Deep Learning Toolbox
+- Deep Learning Toolbox: [More info here](https://uk.mathworks.com/products/deep-learning.html)
+- Image Processing Toolbox: [More info here](https://uk.mathworks.com/products/image-processing.html)
 
 **Important Note:** SynthStroke works out of the box with pure MATLAB. There is no need for Python, CUDA, or MEX compilation. This toolbox is designed to run seamlessly within the MATLAB environment, making it easy to use without additional setup or dependencies.
 
