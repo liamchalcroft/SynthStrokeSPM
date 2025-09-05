@@ -24,7 +24,7 @@ function logits_dl = tta_pred(V, net)
       [true true true]
   };
 
-  logits_dl = zeros(size(V));
+  accumulated_logits = [];
 
   for i = 1:length(flips)
     V_flipped = V;
@@ -38,20 +38,26 @@ function logits_dl = tta_pred(V, net)
         V_flipped = flip(V_flipped, 3);
     end
     
-    logits_dl = predict(net, V_flipped);
+    current_logits = predict(net, V_flipped);
     
     if flips{i}(1)
-        logits_dl = flip(logits_dl, 1);
+        current_logits = flip(current_logits, 1);
     end
     if flips{i}(2)
-        logits_dl = flip(logits_dl, 2);
+        current_logits = flip(current_logits, 2);
     end
     if flips{i}(3)
-        logits_dl = flip(logits_dl, 3);
+        current_logits = flip(current_logits, 3);
     end
     
-    logits_dl = logits_dl + logits_dl;
+    if i == 1
+        accumulated_logits = current_logits;
+    else
+        accumulated_logits = accumulated_logits + current_logits;
+    end
   end
+
+  logits_dl = accumulated_logits;
 
   logits_dl = logits_dl / length(flips);
 end
