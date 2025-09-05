@@ -35,11 +35,11 @@ This SPM12 toolbox provides automated stroke lesion segmentation for brain MRI a
 ## Installation
 
 ### Prerequisites
-- MATLAB (R2024a or later recommended)
-- SPM12
-- Deep Learning Toolbox
-- Image Processing Toolbox
-- **Deep Learning Toolbox Converter for ONNX Model Format** (Support Package)
+- [MATLAB](https://www.mathworks.com/products/matlab.html) (R2024a or later recommended)
+- [SPM12](https://www.fil.ion.ucl.ac.uk/spm/) (SPM25 should work but is untested)
+- [Deep Learning Toolbox](https://www.mathworks.com/products/deep-learning.html)
+- [Image Processing Toolbox](https://www.mathworks.com/products/image.html)
+- [**Deep Learning Toolbox Converter for ONNX Model Format**](https://www.mathworks.com/matlabcentral/fileexchange/67296-deep-learning-toolbox-converter-for-onnx-model-format) (Support Package)
 
 ### Installation Steps
 
