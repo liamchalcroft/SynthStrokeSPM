@@ -1,91 +1,135 @@
-# 🧠 SynthStroke: SPM Toolbox for Stroke Lesion Segmentation
+<div align="center">
 
-SynthStroke is a powerful toolbox for SPM (Statistical Parametric Mapping) that performs automated stroke lesion segmentation on brain MRI images using deep learning techniques.
+# SynthStroke SPM Toolbox
+### Automated Stroke Lesion Segmentation for SPM12
 
-*Note: This tool is currently in a very early alpha state and is likely to have bugs or unexpected failure cases. We warmly welcome users to test the tool on their own data and report any issues on GitHub. Your feedback and bug reports will help us improve the tool's reliability and functionality.*
+[![Paper](https://img.shields.io/badge/Paper-MELBA%202025-blue?style=for-the-badge&logo=arxiv)](http://dx.doi.org/10.59275/j.melba.2025-f3g6)
+[![PyTorch](https://img.shields.io/badge/PyTorch-Implementation-orange?style=for-the-badge&logo=github)](https://github.com/liamchalcroft/SynthStroke)
+[![MATLAB](https://img.shields.io/badge/MATLAB-R2024a+-green?style=for-the-badge&logo=mathworks)](https://www.mathworks.com/products/matlab.html)
+[![License](https://img.shields.io/badge/License-MIT-red?style=for-the-badge)](LICENSE)
 
-## ✨ Features
+*SPM12 toolbox implementation of "[Synthetic Data for Robust Stroke Segmentation](http://dx.doi.org/10.59275/j.melba.2025-f3g6)" published in Machine Learning for Biomedical Imaging (MELBA) 2025.*
 
-- Automated stroke lesion segmentation
-- Integration with SPM12
-- Support for Test Time Augmentation (TTA)
-- Binary hole filling for lesion masks
-- Customizable output options
-- Support for both MRI and CT data
+</div>
 
-## 🛠️ Installation
+---
 
-1. Download the SynthStroke toolbox.
-2. Place the SynthStroke folder in your SPM toolbox directory:
-   ```
-   /path/to/spm12/toolbox/SynthStroke
-   ```
-3. Restart SPM12 or refresh the SPM toolbox menu.
+## About
 
-That's it! No additional compilation or external dependencies are required.
+This SPM12 toolbox provides automated stroke lesion segmentation for brain MRI and CT images using deep learning. The toolbox integrates directly into SPM's batch system and includes a pre-trained U-Net model trained on synthetic stroke data for robust performance across different imaging protocols.
 
-## 🚀 Usage
+**Features:**
+- Pre-trained U-Net model for automated stroke lesion segmentation
+- Native SPM12 batch interface integration
+- Support for both T1-weighted MRI and CT imaging
+- Test Time Augmentation (TTA) for improved accuracy
+- Automatic 1mm isotropic resampling with restoration to original resolution
+- Morphological hole filling and configurable probability thresholds
 
-1. Open SPM12
-2. Navigate to "Batch" → "SPM" → "Tools" → "SynthStroke"
-3. In the batch editor:
-   - Select your input image(s)
-   - Choose your desired options
-   - Set the output directory (optional)
-   - Run the batch
+**Paper**: Chalcroft, L., Pappas, I., Price, C. J., & Ashburner, J. (2025). [Synthetic Data for Robust Stroke Segmentation](http://dx.doi.org/10.59275/j.melba.2025-f3g6). *Machine Learning for Biomedical Imaging*, 3, 317–346.
 
-## ⚙️ Options
+*Note: This tool is currently in early development. Please report any issues on GitHub to help improve the tool's reliability.*
 
-- **Use TTA**: Enable Test Time Augmentation for potentially improved results
-- **Fill holes**: Apply binary hole filling to the lesion mask
-- **Lesion threshold**: Set the threshold for lesion classification (0-1)
-- **Output prefix**: Customize the prefix for output files
+---
 
-## 📊 Output
+## Installation
 
-SynthStroke generates:
-- Posterior probability maps for each class
-- Binary lesion mask
-
-## 📋 Requirements
-
-- MATLAB (R2024b tested, R2024a expected to work; compatibility with older versions in development)
+### Prerequisites
+- MATLAB (R2024a or later recommended)
 - SPM12
-- Deep Learning Toolbox: [More info here](https://uk.mathworks.com/products/deep-learning.html)
-- Image Processing Toolbox: [More info here](https://uk.mathworks.com/products/image-processing.html)
+- Deep Learning Toolbox
+- Image Processing Toolbox
+- **Deep Learning Toolbox Converter for ONNX Model Format** (Support Package)
 
-**Important Note:** SynthStroke works out of the box with pure MATLAB. There is no need for Python, CUDA, or MEX compilation. This toolbox is designed to run seamlessly within the MATLAB environment, making it easy to use without additional setup or dependencies.
+### Installation Steps
 
-## 🆘 Support
+1. **Download the toolbox:**
+   ```bash
+   git clone https://github.com/liamchalcroft/SynthStrokeSPM.git
+   ```
 
-For issues, questions, or contributions, please open an issue on the GitHub repository.
+2. **Install ONNX support package:**
+   - Open MATLAB → HOME tab → Add-Ons → Get Add-Ons
+   - Search for "Deep Learning Toolbox Converter for ONNX Model Format"
+   - Install the package
 
-## 📚 Citation
+3. **Place in SPM toolbox directory:**
+   ```bash
+   mv SynthStrokeSPM /path/to/spm12/toolbox/
+   ```
 
-If you use SynthStroke in your research, please cite:
+4. **Restart SPM12** or refresh the toolbox menu
 
-Chalcroft, L., Pappas, I., Price, C. J., & Ashburner, J. (2024). Synthetic Data for Robust Stroke Segmentation. arXiv preprint arXiv:2404.01946. https://arxiv.org/abs/2404.01946
+The toolbox requires no compilation and works entirely within MATLAB.
 
-## 📜 License
+---
 
-This project is licensed under the MIT License.
+## Usage
 
-Copyright (c) [2024] [Liam Chalcroft]
+### Quick Start
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. **Open SPM12** and navigate to **Batch** → **SPM** → **Tools** → **SynthStroke**
+2. **Test with sample data:** Select `test_input/ct_img.nii` or `test_input/mprage_img.nii`
+3. **Run batch** to generate segmentation results
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+### Standard Workflow
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+1. **Load images:** Select your T1-weighted MRI or CT scans (.nii/.img files)
+2. **Configure options:**
+   - **Use TTA**: Enable for improved accuracy (slower processing)
+   - **Fill Holes**: Remove small gaps in lesion masks
+   - **Lesion Threshold**: Adjust sensitivity (default: 0.5)
+   - **Output Directory**: Specify save location (optional)
+3. **Run batch processing**
+
+### Expected Processing Time
+- **Single image**: 1-2 minutes (standard), 5-10 minutes (with TTA)
+- **Batch processing**: Scales linearly with number of images
+
+---
+
+## Output Files
+
+The toolbox generates the following files:
+
+- `c1*` - Background tissue posterior probability map
+- `c2*` - Stroke lesion posterior probability map  
+- `lesion_*` - Binary lesion mask (thresholded with optional hole filling)
+
+---
+
+## Support
+
+For issues, questions, or contributions:
+- **Bug reports**: [Open an issue](https://github.com/liamchalcroft/SynthStrokeSPM/issues)
+- **PyTorch implementation**: [SynthStroke repository](https://github.com/liamchalcroft/SynthStroke)
+- **Questions**: Contact via GitHub issues
+
+---
+
+## Citation
+
+If you use this work in your research, please cite:
+
+```bibtex
+@article{Chalcroft2025,
+  title = {Synthetic Data for Robust Stroke Segmentation},
+  volume = {3},
+  ISSN = {2766-905X},
+  url = {http://dx.doi.org/10.59275/j.melba.2025-f3g6},
+  DOI = {10.59275/j.melba.2025-f3g6},
+  number = {August 2025},
+  journal = {Machine Learning for Biomedical Imaging},
+  publisher = {Machine Learning for Biomedical Imaging},
+  author = {Chalcroft, Liam and Pappas, Ioannis and Price, Cathy J. and Ashburner, John},
+  year = {2025},
+  month = aug,
+  pages = {317–346}
+}
+```
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
